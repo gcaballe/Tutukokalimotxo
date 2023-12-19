@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draggable Tokens</title>
+    <title>Tutukalimotxo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -14,7 +15,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
+            width: 100%;
             height: 100vh;
             background-image: url('background.png'); /* Update to the correct path */
             background-size: cover;
@@ -75,10 +76,15 @@
     <span id="tokenCount">Tokens: 0</span>
     <button class="control-button" onclick="addToken()">+</button>
     <button class="control-button" onclick="removeToken()">-</button>
+    <button class="control-button" onclick="toggleFullScreen()"><i class="fas fa-expand"></i></button>
 </div>
 
 <script>
-    const tokenColors = ['#ff5733', '#33a1ff', '#7cff33', '#ff33f6', '#3366ff']; // Add more colors as needed
+    const tokenColors = [
+  '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+  '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+  '#ff5733', '#33a1ff', '#7cff33', '#ff33f6', '#3366ff'
+];
     const tokens = [];
     const controls = document.getElementById('controls');
     const tokenCountElement = document.getElementById('tokenCount');
@@ -108,15 +114,13 @@
     function attachDragEvents(token) {
         let offsetX, offsetY, isDragging = false;
 
+        // Mouse events
         token.addEventListener('mousedown', (e) => {
             isDragging = true;
             offsetX = e.clientX - token.getBoundingClientRect().left;
             offsetY = e.clientY - token.getBoundingClientRect().top;
             token.style.cursor = 'grabbing';
         });
-
-        // Prevent the default drag-and-drop behavior
-        token.ondragstart = () => false;
 
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
@@ -132,6 +136,33 @@
             isDragging = false;
             token.style.cursor = 'grab';
         });
+
+        // Touch events
+        token.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            isDragging = true;
+            offsetX = touch.clientX - token.getBoundingClientRect().left;
+            offsetY = touch.clientY - token.getBoundingClientRect().top;
+            token.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+
+            const touch = e.touches[0];
+            const x = touch.clientX - offsetX;
+            const y = touch.clientY - offsetY;
+
+            token.style.left = x + 'px';
+            token.style.top = y + 'px';
+            e.preventDefault();
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+            token.style.cursor = 'grab';
+        });
     }
 
     function updateTokenColors() {
@@ -144,7 +175,39 @@
     function updateTokenCount() {
         tokenCountElement.textContent = `Tokens: ${tokens.length}`;
     }
+
+    function toggleFullScreen() {
+        const doc = window.document;
+        const docEl = doc.documentElement;
+
+        const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullscreen || docEl.msRequestFullscreen;
+        const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+        if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen();
+            } else if (docEl.mozRequestFullScreen) {
+                docEl.mozRequestFullScreen();
+            } else if (docEl.webkitRequestFullscreen) {
+                docEl.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            } else if (docEl.msRequestFullscreen) {
+                docEl.msRequestFullscreen();
+            }
+        } else {
+            if (cancelFullScreen) {
+                cancelFullScreen.call(doc);
+            } else if (doc.mozCancelFullScreen) {
+                doc.mozCancelFullScreen();
+            } else if (doc.webkitExitFullscreen) {
+                doc.webkitExitFullscreen();
+            } else if (doc.msExitFullscreen) {
+                doc.msExitFullscreen();
+            }
+        }
+    }
+
 </script>
+
 
 </body>
 </html>
