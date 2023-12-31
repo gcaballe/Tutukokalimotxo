@@ -13,13 +13,16 @@
         #background {
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
+            left: 50%;
+            width: 70%;
+            transform: translateX(-50%); /* Center the div horizontally */
+
             /* width: 1753px; */
-            height: 295%;
+            height: 200%; /* 295% */
             /* height: 2480px; */
             background-image: url('background.jpg'); /* Update to the correct path */
-            background-size: cover;
+            background-size: contain;
+            background-repeat: no-repeat;
             overflow-y: auto;
             overflow-x: auto;
             z-index: -1;
@@ -27,8 +30,8 @@
     
         .token {
             position: absolute;
-            width: 70px;
-            height: 70px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             overflow: hidden;
             cursor: grab;
@@ -96,9 +99,9 @@
         const newToken = document.createElement('div');
         newToken.className = 'token';
         newToken.draggable = true;
-        newToken.style.top = '201px';
-        newToken.style.left = '952px';
-        newToken.innerHTML = '<img src="https://static.thenounproject.com/png/3842652-200.png" alt="New Token">';
+        newToken.style.top = '20%';
+        newToken.style.left = '50%';
+        newToken.innerHTML = '<img src="./token.png" alt="New Token">';
         document.body.appendChild(newToken);
         tokens.push(newToken);
         attachDragEvents(newToken);
@@ -115,58 +118,83 @@
     }
 
     function attachDragEvents(token) {
-        let offsetX, offsetY, isDragging = false;
 
-        // Mouse events
-        token.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            offsetX = e.clientX - token.getBoundingClientRect().left;
-            offsetY = e.clientY - token.getBoundingClientRect().top;
-            token.style.cursor = 'grabbing';
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-
-            const x = e.clientX - offsetX;
-            const y = e.clientY - offsetY;
-
-            token.style.left = x + 'px';
-            token.style.top = y + 'px';
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            token.style.cursor = 'grab';
-        });
-
-        // Touch events
-        token.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            isDragging = true;
-            offsetX = touch.clientX - token.getBoundingClientRect().left;
-            offsetY = touch.clientY - token.getBoundingClientRect().top;
-            token.style.cursor = 'grabbing';
-            e.preventDefault();
-        });
-
-        document.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-
-            const touch = e.touches[0];
-            const x = touch.clientX - offsetX;
-            const y = touch.clientY - offsetY;
-
-            token.style.left = x + 'px';
-            token.style.top = y + 'px';
-            e.preventDefault();
-        });
-
-        document.addEventListener('touchend', () => {
-            isDragging = false;
-            token.style.cursor = 'grab';
+        token.addEventListener('touchmove', function(e) {
+            // grab the location of touch
+            var touchLocation = e.targetTouches[0];
+            
+            // assign box new coordinates based on the touch.
+            token.style.left = touchLocation.pageX + 'px';
+            token.style.top = touchLocation.pageY + 'px';
         });
     }
+
+
+    /* Mouse events
+    token.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const rect = token.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        token.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const x = e.clientX - offsetX;
+        const y = e.clientY - offsetY;
+
+        token.style.left = x + 'px';
+        token.style.top = y + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        token.style.cursor = 'grab';
+    });
+
+    // Touch events
+    token.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        isDragging = true;
+        const rect = token.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+        token.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+
+    document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+
+        const touch = e.touches[0];
+        const x = touch.clientX - offsetX;
+        const y = touch.clientY - offsetY;
+
+        token.style.left = x + 'px';
+        token.style.top = y + 'px';
+        e.preventDefault();
+    });
+
+    document.addEventListener('touchend', () => {
+        isDragging = false;
+        token.style.cursor = 'grab';
+    });
+}*/
+
+  
+  /* record the position of the touch
+  when released using touchend event.
+  This will be the drop position. */
+  
+  box.addEventListener('touchend', function(e) {
+    // current box position.
+    var x = parseInt(box.style.left);
+    var y = parseInt(box.style.top);
+  })
+
+
 
     function updateTokenColors() {
         tokens.forEach((token, index) => {
