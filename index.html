@@ -8,35 +8,38 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden;
         }
-
+    
         #background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
-            background-image: url('background.png'); /* Update to the correct path */
+            /* width: 1753px; */
+            height: 295%;
+            /* height: 2480px; */
+            background-image: url('background.jpg'); /* Update to the correct path */
             background-size: cover;
+            overflow-y: auto;
+            overflow-x: auto;
             z-index: -1;
         }
-
+    
         .token {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             overflow: hidden;
             cursor: grab;
         }
-
+    
         .token img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
+    
         #controls {
             position: fixed;
             bottom: 10px;
@@ -44,7 +47,7 @@
             display: flex;
             gap: 10px;
         }
-
+    
         .control-button {
             width: 30px;
             height: 30px;
@@ -58,7 +61,7 @@
             color: white;
             font-size: 20px;
         }
-
+    
         #tokenCount {
             display: flex;
             align-items: center;
@@ -93,8 +96,8 @@
         const newToken = document.createElement('div');
         newToken.className = 'token';
         newToken.draggable = true;
-        newToken.style.top = '150px';
-        newToken.style.left = '150px';
+        newToken.style.top = '201px';
+        newToken.style.left = '952px';
         newToken.innerHTML = '<img src="https://static.thenounproject.com/png/3842652-200.png" alt="New Token">';
         document.body.appendChild(newToken);
         tokens.push(newToken);
